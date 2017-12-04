@@ -1,28 +1,30 @@
-# Session 9 - Angular
+# Session 9 - Angular Cli
 
 Create a new angular project
 
 `ng new foodapp`
 
+cd into the foodapp directory
+
 Generate components
 
 `ng generate component components/recipes`
+
 `ng generate component components/recipe-detail`
 
 and a service
 
 `ng generate service service/data`
 
-
-Create a second tab in the terminal and go to the foodapp directory
+Create a second tab in the terminal and run:
 
 `npm run start`
 
-Examine `app.module.ts` - no service
+Examine `app.module.ts` - note lack of a service
 
-app.component.html
+app.component.html:
 
-```
+```html
 <div class="wrap">
     <app-recipes></app-recipes>
 </div>
@@ -30,9 +32,9 @@ app.component.html
 
 ## Recipes Component
 
-Add 
+Add:
 
-`pageTitle: string;` and `this.pageTitle = 'Recipes'`
+`pageTitle: string;` to the class and `this.pageTitle = 'Recipes'` to the constructor:
 
 ```js
 import { Component, OnInit } from '@angular/core';
@@ -44,19 +46,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RecipesComponent implements OnInit {
 
-	pageTitle: string;
+pageTitle: string;
 
-  constructor() {
-  	this.pageTitle = 'Recipes'
-  }
+constructor() {
+  this.pageTitle = 'Recipes'
+}
 
-  ngOnInit() {
-  }
+ngOnInit() {
+}
 
 }
 ```
 
-```
+In the template:
+
+```html
 <div class="wrap recipes">
   <h1>{{ pageTitle }}</h1>
 </div>
@@ -64,7 +68,7 @@ export class RecipesComponent implements OnInit {
 
 Add css from the assets folder
 
-Add data to constructor:
+Add data to recipes constructor:
 
 ```js
 this.recipes = [
@@ -101,11 +105,11 @@ this.recipes = [
 ]
 ```
 
-Data type:
+Set the types in the class:
 
 `recipes: object[]`
 
-```
+```js
 recipe: {
   name: string
   title: string
@@ -135,7 +139,7 @@ Build out the html
 </div>
 ```
 
-Add image assets to the project (may need to restart Webpack)
+Add image assets to the project (need to restart Webpack in order for it to load the images)
 
 Adjust css
 
@@ -168,7 +172,7 @@ Adjust css
 
 ## Routing
 
-Add - app.module
+Add the router module - app.module:
 
 ```js
 import { RouterModule, Routes } from '@angular/router';
@@ -191,27 +195,31 @@ const appRoutes: Routes = [
 
 And in the html
 
+```html
+<div class="wrap">
+  <router-outlet></router-outlet>
+</div>
 ```
-<router-outlet></router-outlet>
-```
+
+Test at `http://localhost:4200/recipe`
 
 ## Recipe-detail component
 
-```
+```html
 <button (click)="back()">Back</button>
 ```
 
-```
+```js
 back() {
   window.history.back()
 }
 ```
 
-Go to `http://localhost:4200/recipe`
+Go to `http://localhost:4200/recipe` and test.
 
 We are going to be sharing data and functionality across components.
 
-Create a model `Recipe.ts` in a models folder.
+Create a model, `Recipe.ts`, in a new models folder in `src`.
 
 ```js
  export interface Recipe {
@@ -223,20 +231,24 @@ Create a model `Recipe.ts` in a models folder.
  }
 ```
 
-Use it in our recipes and recipe-detail components
+Use it in our recipes and recipe-detail components.
+
+Import it:
 
 `import { Recipe } from '../../models/Recipe';`
+
+And add it to the class:
 
 `recipe: Recipe;`
 
 Move the data into the service
 
-1. add the service to app.module
+1. register / add the service to app.module
 1. import the service into the recipes templates
 
-In app.module
+In app.module:
 
-```
+```js
 import { DataService } from './service/data.service'
 ...
   providers: [DataService],
@@ -244,24 +256,26 @@ import { DataService } from './service/data.service'
 
 Add param
 
-```
+```js
 const appRoutes: Routes = [
   { path: '', component: RecipesComponent, pathMatch: 'full' },
   { path: 'recipe/:id', component: RecipeDetailComponent }
 ]
 ```
 
-Ammend recipe template
+Ammend the recipes template:
 
-```
+```html
 <a href="recipe/{{recipe.name}}">{{recipe.title}}</a>
 ```
 
-Add to components
+Add / make it available to the recipes and recipe-detail components:
 
 `import { DataService } from '../../service/data.service';`
 
 ## Service
+
+Add the model to the service:
 
 `import { Recipe } from '../models/Recipe';`
 
@@ -304,26 +318,26 @@ constructor() {
   }
 ```
 
-recipes.component
+Remove the data from the recipes.component and call a function from the service to retrieve them:
 
-```
-  constructor(public dataService: DataServiceService) {
+```js
+  constructor(public dataService: DataService) {
     this.pageTitle = 'Recipes'
     this.recipes = this.dataService.getRecipes()
   }
 ```
 
-in service
+Add the function to the service:
 
-```
-	getRecipes() {
-		return this.recipes;
-	}
+```js
+getRecipes() {
+  return this.recipes;
+}
 ```
 
-Get the display in recipe-detail
+Get the display into in recipe-detail - we're going to have to access the url params.
 
-```
+```js
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
 ...
@@ -334,29 +348,38 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
   }
 ```
 
-in service
+in the service:
 
-```
-	getRecipe(id) {
-		this.recipe = this.recipes.filter(recipe => recipe.name == id)[0]
-		return this.recipe;
-	}
+```js
+getRecipe(id) {
+  this.recipe = this.recipes.filter(recipe => recipe.name == id)[0]
+  return this.recipe;
+}
 ```
 
-recipe-detail html
+recipe-detail html:
 
-```
+```html
 <h1>{{ recipe.title }}</h1>
 <img style="width: 30%" src="assets/home/{{recipe.image}}" />
 <p>{{ recipe.description }}</p>
 <button (click)="back()">Back</button>
 ```
 
-## HTTP 
+## HTTP Service
+
+We are going to get the data from an API using Http ($http in Angular 1).
+
+*Deploy the api using the backend assets in the zip file.*
+
+1. unzip
+1. npm install
+1. `npm run start` the api in backend
+1. test at the get api endpoint `http://localhost:3006/`
 
 add http service to app.module
 
-```
+```js
 import { HttpModule } from '@angular/http';
 
 ...
@@ -368,51 +391,50 @@ import { HttpModule } from '@angular/http';
   ],
 ```
 
-in service
+Now that its added to our app we can use it in the service:
 
-```
+```js
 import { Http, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise'
 ...
 
   constructor(private http: Http) {
-  	
   }
 
 ...
 
-	getRecipes() {
-		return this.http.get('http://localhost:3006/api/recipe').toPromise()
-	}
+getRecipes() {
+  return this.http.get('http://localhost:3006/api/recipe').toPromise()
+}
 ```
 
 ## API
 
-`npm run start` the api in backend
+note the app.use headers in app.js. Uncomment these lines
 
-note the app.use headers in app.js
+ in recipes.component
 
-in recipes.component
-
-```
+```js
   async ngOnInit() {
     const response = await this.dataService.getRecipes()
     this.recipes = response.json()
   }
 ```
 
-in recipes-detail.component
+In recipe-detail component:
 
-```
-  constructor(public dataService: DataServiceService, public route: ActivatedRoute) {
-    this.id = this.route.snapshot.params['id']
-  }
-```
-
-```
+```js
   async ngOnInit() {
     const response = await this.dataService.getRecipe(this.id)
     this.recipe = response.json()
+  }
+```
+
+in recipes-detail.component
+
+```js
+  constructor(public dataService: DataService, public route: ActivatedRoute) {
+    this.id = this.route.snapshot.params['id']
   }
 ```
 
@@ -420,31 +442,30 @@ in service
 
 `import { Router, ActivatedRoute, Params } from '@angular/router';`
 
-```
-	id: string;
-	recipe: Recipe;
-	recipes: Recipe[]
-```
-
-
-```
-	getRecipe(id) {
-		return this.http.get('http://localhost:3006/api/recipe/' + id).toPromise()
-	}
+```js
+id: string;
+recipe: Recipe;
+recipes: Recipe[]
 ```
 
-```
-	constructor(private http: Http) {
-		
-	}
+
+```js
+getRecipe(id) {
+  return this.http.get('http://localhost:3006/api/recipe/' + id).toPromise()
+}
 ```
 
-check the link
-
+```js
+constructor(private http: Http) { 
+}
 ```
-        <h2>
-          <a href="recipe/{{recipe._id}}">{{recipe.title}}</a>
-        </h2>
+
+Ammend the link in recipes template:
+
+```js
+<h2>
+  <a href="recipe/{{recipe._id}}">{{recipe.title}}</a>
+</h2>
 
 ```
 
