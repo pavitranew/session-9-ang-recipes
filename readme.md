@@ -341,29 +341,30 @@ Remove the data from the recipes.component and call a function from the service 
 
 ## A note on `public`
 
-Suppose you have a simple class with two properties. And the constructor is used to initialize the properties like this:
+Constructors define which parameters to provide when instantiate your objects. In TypeScript, you can also add modifiers like private or public to define, at the same time, class properties and set their values with the provided ones.
+
+e.g.:
 
 ```js
-class Point {
-    private x: number;
-    private y: number;
-    constructor(x: number, y: number) {
-        this.x = x;
-        this.y = y
-    }
+class Car {
+  constructor(private engine:string, private tires:string, private doors:number){
+  }
 }
 ```
 
-A very common pattern in objected oriented programming. In TypeScript there is a shorthand for this pattern:
+Is similar to:
 
 ```js
-class Point {
-    constructor(public x: number, public y: number) {
-    }
+class Car {
+  constructor(engine:string, tires:string, doors:number){
+    this.engine = engine;
+    this.tires = tires;
+    this.doors = doors;
+  }
 }
 ```
 
-By simply prefixing the constructor arg with the word private (or public or readonly) it automatically creates the property and initializes it from the constructor args.
+By simply prefixing the constructor arg with the word private (or public or readonly) it automatically creates the property and initializes it from the constructor arguments.
 
 ## Service cont
 
