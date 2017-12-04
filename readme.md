@@ -295,39 +295,39 @@ Add the model to the service:
 
 ```js
 constructor() {
-  	this.recipes = [
-      {
-        "name": "recipe1309",
-        "title": "Lasagna",
-        "date": "2013-09-01",
-        "description": "Lasagna noodles piled high and layered full of three kinds of cheese to go along with the perfect blend of meaty and zesty, tomato pasta sauce all loaded with herbs.",
-        "image": "lasagne.png"
-      },
-      {
-        "name": "recipe1404",
-        "title": "Pho-Chicken Noodle Soup",
-        "date": "2014-04-15",
-        "description": "Pho (pronounced \"fuh\") is the most popular food in Vietnam, often eaten for breakfast, lunch and dinner. It is made from a special broth that simmers for several hours infused with exotic spices and served over rice noodles with fresh herbs.",
-        "image": "pho.png"
-      },
+  this.recipes = [
+    {
+      "name": "recipe1309",
+      "title": "Lasagna",
+      "date": "2013-09-01",
+      "description": "Lasagna noodles piled high and layered full of three kinds of cheese to go along with the perfect blend of meaty and zesty, tomato pasta sauce all loaded with herbs.",
+      "image": "lasagne.png"
+    },
+    {
+      "name": "recipe1404",
+      "title": "Pho-Chicken Noodle Soup",
+      "date": "2014-04-15",
+      "description": "Pho (pronounced \"fuh\") is the most popular food in Vietnam, often eaten for breakfast, lunch and dinner. It is made from a special broth that simmers for several hours infused with exotic spices and served over rice noodles with fresh herbs.",
+      "image": "pho.png"
+    },
 
-      {
-        "name": "recipe1210",
-        "title": "Guacamole",
-        "date": "2016-10-01",
-        "description": "Guacamole is definitely a staple of Mexican cuisine. Even though Guacamole is pretty simple, it can be tough to get the perfect flavor - with this authentic Mexican guacamole recipe, though, you will be an expert in no time.",
-        "image": "guacamole.png"
-      },
+    {
+      "name": "recipe1210",
+      "title": "Guacamole",
+      "date": "2016-10-01",
+      "description": "Guacamole is definitely a staple of Mexican cuisine. Even though Guacamole is pretty simple, it can be tough to get the perfect flavor - with this authentic Mexican guacamole recipe, though, you will be an expert in no time.",
+      "image": "guacamole.png"
+    },
 
-      {
-        "name": "recipe1810",
-        "title": "Hamburger",
-        "date": "2012-10-20",
-        "description": "A Hamburger (often called a burger) is a type of sandwich in the form of  rounded bread sliced in half with its center filled with a patty which is usually ground beef, then topped with vegetables such as lettuce, tomatoes and onions.",
-        "image": "hamburger.png"
-      }
-    ]
-  }
+    {
+      "name": "recipe1810",
+      "title": "Hamburger",
+      "date": "2012-10-20",
+      "description": "A Hamburger (often called a burger) is a type of sandwich in the form of  rounded bread sliced in half with its center filled with a patty which is usually ground beef, then topped with vegetables such as lettuce, tomatoes and onions.",
+      "image": "hamburger.png"
+    }
+  ]
+}
 ```
 
 Remove the data from the recipes.component and call a function from the service to retrieve them:
@@ -338,6 +338,34 @@ Remove the data from the recipes.component and call a function from the service 
     this.recipes = this.dataService.getRecipes()
   }
 ```
+
+## A note on `public`.
+
+Suppose you have a simple class with two properties. And the constructor is used to initialize the properties like this:
+
+```js
+class Point {
+    private x: number;
+    private y: number;
+    constructor(x: number, y: number) {
+        this.x = x;
+        this.y = y
+    }
+}
+```
+
+A very common pattern in objected oriented programming. In TypeScript there is a shorthand for this pattern:
+
+```js
+class Point {
+    constructor(public x: number, public y: number) {
+    }
+}
+```
+
+By simply prefixing the constructor arg with the word private (or public or readonly) it automatically creates the property and initializes it from the constructor args.
+
+## Service cont
 
 Add the function to the service:
 
