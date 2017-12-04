@@ -4,6 +4,8 @@
 
 Using the notes from session 7 where we created our API - set the foodapp project to request information from *your* database on mLab.
 
+Remember, to seed your database you can use the `api/import` endpoint.
+
 We will need to do this before we can start sending post / delete / etc. requests.
 
 ## FoodApp
@@ -149,7 +151,7 @@ Build out the html
 
 Add image assets to the project (need to restart Webpack in order for it to load the images)
 
-Adjust css
+Adjust the css:
 
 ```css
 .wrap ul {
@@ -186,6 +188,7 @@ Add the router module - app.module:
 import { RouterModule, Routes } from '@angular/router';
 
 ...
+
 const appRoutes: Routes = [
   { path: '', component: RecipesComponent, pathMatch: 'full' },
   { path: 'recipe', component: RecipeDetailComponent }
@@ -199,6 +202,7 @@ const appRoutes: Routes = [
   ],
 
 ...
+
 ```
 
 And in the html
