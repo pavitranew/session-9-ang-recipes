@@ -1,5 +1,13 @@
 # Session 9 - Angular
 
+## Homework
+
+Using the notes from session 7 where we created our API - set the foodapp project to request information from *your* database on mLab.
+
+We will need to do this before we can start sending post / delete / etc. requests.
+
+## FoodApp
+
 Create a new angular project
 
 `ng new foodapp`
