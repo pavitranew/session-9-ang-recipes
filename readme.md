@@ -449,6 +449,10 @@ getRecipes() {
 }
 ```
 
+By default, Angular uses `observables` [link](http://jsclass.jcoglan.com/observable.html) to publish and subscribe to data feeds. Here I am circumventing this in favor of `async / await` [link](https://hackernoon.com/6-reasons-why-javascripts-async-await-blows-promises-away-tutorial-c7ec10518dd9).
+
+Review the documents in assets/async-await. There are some additional examples [on MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function).
+
 ## API
 
 note the app.use headers in app.js. Uncomment these lines
@@ -479,7 +483,7 @@ in recipes-detail.component
   }
 ```
 
-in service
+in service:
 
 `import { Router, ActivatedRoute, Params } from '@angular/router';`
 
@@ -489,7 +493,6 @@ recipe: Recipe;
 recipes: Recipe[]
 ```
 
-
 ```js
 getRecipe(id) {
   return this.http.get('http://localhost:3006/api/recipe/' + id).toPromise()
@@ -497,7 +500,7 @@ getRecipe(id) {
 ```
 
 ```js
-constructor(private http: Http) { 
+constructor(private http: Http) {
 }
 ```
 
