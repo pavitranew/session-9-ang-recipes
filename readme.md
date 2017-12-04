@@ -339,7 +339,7 @@ Remove the data from the recipes.component and call a function from the service 
   }
 ```
 
-## A note on `public`.
+## A note on `public`
 
 Suppose you have a simple class with two properties. And the constructor is used to initialize the properties like this:
 
