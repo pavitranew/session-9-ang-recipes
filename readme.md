@@ -1,4 +1,4 @@
-# Session 9
+# Session 9 - Angular
 
 Create a new angular project
 
