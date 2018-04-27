@@ -26,9 +26,9 @@ and a service
 
 `ng generate service service/data`
 
-Create a second tab in the terminal and run:
+Create a second terminal and run:
 
-`npm run start`
+`ng serve`
 
 Examine `app.module.ts` - note lack of a service
 
@@ -47,6 +47,25 @@ Add:
 `pageTitle: string;` to the class and `this.pageTitle = 'Recipes'` to the constructor:
 
 ```js
+// import { Component, OnInit } from '@angular/core';
+
+// @Component({
+//   selector: 'app-recipes',
+//   templateUrl: './recipes.component.html',
+//   styleUrls: ['./recipes.component.css']
+// })
+// export class RecipesComponent implements OnInit {
+
+// pageTitle: string;
+
+// constructor() {
+//   this.pageTitle = 'Recipes'
+// }
+
+// ngOnInit() {
+// }
+
+// }
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -56,16 +75,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RecipesComponent implements OnInit {
 
-pageTitle: string;
+  pageTitle: string;
 
-constructor() {
-  this.pageTitle = 'Recipes'
+  constructor() {
+    this.pageTitle = 'Recipes'
+  }
+
+  ngOnInit() {
+  }
+
 }
 
-ngOnInit() {
-}
-
-}
 ```
 
 In the template:
@@ -235,11 +255,11 @@ Create a model, `Recipe.ts`, in a new models folder in `src`.
 
 ```js
  export interface Recipe {
- 	name: string;
- 	title: string;
- 	date: string;
- 	description: string;
- 	image: string;
+  name: string;
+  title: string;
+  date: string;
+  description: string;
+  image: string;
  }
 ```
 
