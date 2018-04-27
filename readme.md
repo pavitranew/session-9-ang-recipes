@@ -536,31 +536,3 @@ Ammend the link in recipes template:
 Safe operator?
 
 `<h1>{{ recipe?.title }}</h1>`
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
