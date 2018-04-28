@@ -21,9 +21,15 @@ export class RecipeDetailComponent implements OnInit {
     this.id = this.route.snapshot.params['id']
   }
 
-  async ngOnInit() {
-    const response = await this.dataService.getRecipe(this.id)
-    this.recipe = response.json()
+  public ngOnInit() {
+    // const response = await this.dataService.getRecipe(this.id)
+    // this.recipe = response.json()
+    this.dataService
+      .getRecipe(this.id)
+      .subscribe(
+        (recipes) => {
+          this.recipe = recipes;
+        });
   }
 
 }

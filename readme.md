@@ -626,7 +626,11 @@ export class Recipe {
 
 recipes component
 
-```
+In obersvables `subscribe` replaces promises' `then`.
+
+An observable doesn't start emitting values until `subscribe` is called.
+
+```js
   public ngOnInit() {
     // const response = await this.dataService.getRecipes()
     // this.recipes = response.json()
@@ -639,6 +643,75 @@ recipes component
   }
 ```
 
+## HttpClient
+
+Module
+
+```
+import { HttpClientModule } from '@angular/common/http';
+
+  imports: [
+    BrowserModule,
+    RouterModule.forRoot(appRoutes),
+    HttpModule,
+    HttpClientModule
+  ],
+```
+
+Service
+
+```
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+
+export class DataService {
+  constructor(private http: HttpClient) { 
+  }
+
+    public getRecipes(): Observable<Recipe[]> {
+    return this.http
+      .get<Recipe[]>('http://localhost:3006/api/recipe')
+  }
+
+    public getRecipe(id: string): Observable<Recipe> {
+    return this.http
+      .get<Recipe>('http://localhost:3006/api/recipe/' + id)
+  }
+
+```
+
+recipes component
+
+```
+<h2>
+  <!-- <a href="recipe/{{recipe._id}}">{{recipe.title}}</a> -->
+  <a [routerLink]="['/recipe', recipe._id]">{{recipe.title}}</a>
+</h2>
+```
+
+
+recipes detail compoent
+
+```
+  public ngOnInit() {
+    // const response = await this.dataService.getRecipe(this.id)
+    // this.recipe = response.json()
+    this.dataService
+      .getRecipe(this.id)
+      .subscribe(
+        (recipes) => {
+          this.recipe = recipes;
+        });
+  }
+  ```
+
+Remove the safe operators for recipe detail template
+
+```
+<h1>{{ recipe.title }}</h1>
+<img style="width: 30%" src="assets/home/{{recipe.image}}" />
+<p>{{ recipe.description }}</p>
+<button (click)="back()">Back</button>
+```
 
 
 
