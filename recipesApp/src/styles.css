@@ -1,0 +1,58 @@
+/* You can add global styles to this file, and also import other style files */
+@import url("https://fonts.googleapis.com/css?family=Lobster");
+:root {
+  --blue: #007eb6;
+  --green: #3f504a;;
+}
+
+html {
+  box-sizing: border-box;
+  font-family: 'helvetica neue';
+  font-size: 20px;
+  font-weight: 200;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+body {
+  min-height: 100vh;
+  margin: 0;
+  background-color: var(--blue);
+}
+
+.wrap {
+  background: #eee;
+  max-width: 90%;
+  padding: 0.5rem;
+  margin: 1rem auto;
+}
+.wrap h1, 
+.wrap h2 {
+  font-family: lobster;
+  margin-top: 0;
+}
+
+.wrap ul {
+  list-style: none;
+  padding: 0;
+}
+
+.wrap li {
+  display: flex;
+  padding: 1rem;
+}
+
+.wrap li img {
+  width: 30%;
+  height: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  margin-right: 1rem;
+  background-color: #fff;
+  box-shadow: 2px 2px 4px #ccc;
+}
+
+.wrap li a {
+  color: #7e360d;
+  text-decoration: none;
+}

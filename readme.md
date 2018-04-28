@@ -2,11 +2,9 @@
 
 ## Homework
 
-Using the notes from session 7 where we created our API - set the foodapp project to request information from *your* database on mLab.
+Update this project to request information from *your* database on mLab.
 
-Remember, to seed your database you can use the `api/import` endpoint.
-
-We will need to do this before we can start sending post / delete / etc. requests.
+Remember, to seed your database you can use the `api/import` endpoint. (You will need to do this before we can start sending post / delete / etc. requests.)
 
 ## FoodApp
 
@@ -25,10 +23,11 @@ Generate components
 and a service
 
 `ng generate service service/data`
+`ng generate service service/data --module app.module.ts`
 
 Create a second tab in the terminal and run:
 
-`npm run start`
+`ng serve`
 
 Examine `app.module.ts` - note lack of a service
 
@@ -44,7 +43,13 @@ app.component.html:
 
 Add:
 
-`pageTitle: string;` to the class and `this.pageTitle = 'Recipes'` to the constructor:
+`pageTitle: string;` 
+
+to the class and 
+
+`this.pageTitle = 'Recipes'` 
+
+to the constructor:
 
 ```js
 import { Component, OnInit } from '@angular/core';
@@ -55,20 +60,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./recipes.component.css']
 })
 export class RecipesComponent implements OnInit {
-
-pageTitle: string;
-
-constructor() {
-  this.pageTitle = 'Recipes'
-}
-
-ngOnInit() {
-}
-
+  pageTitle: string;
+  constructor() { 
+    this.pageTitle = 'Recipes'
+  }
+  ngOnInit() {
+  }
 }
 ```
 
-In the template:
+In the recipes template:
 
 ```html
 <div class="wrap recipes">
@@ -117,7 +118,9 @@ this.recipes = [
 
 Set the types in the class:
 
-`recipes: object[]`
+`recipes: object[];`
+
+(BAD) 
 
 ```js
 recipe: {
@@ -149,9 +152,9 @@ Build out the html
 </div>
 ```
 
-Add image assets to the project (need to restart Webpack in order for it to load the images)
+Add image assets to the project (you'll need to restart Webpack in order for it to process and allow the images to appear).
 
-Adjust the css:
+Adjust the global css:
 
 ```css
 .wrap ul {
@@ -180,9 +183,24 @@ Adjust the css:
 }
 ```
 
+Add a `.recipe-entry` class to the recipes html template and css for the recipes component css:
+
+```css
+@media (max-width: 620px){
+  .recipe-entry li {
+    display: flex;
+    flex-direction: column;
+  }
+  .recipe-entry img {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+}
+```
+
 ## Routing
 
-Add the router module - app.module:
+Add the router module - `app.module`:
 
 ```js
 import { RouterModule, Routes } from '@angular/router';
@@ -205,7 +223,7 @@ const appRoutes: Routes = [
 
 ```
 
-And in the html
+And in `app-component` html
 
 ```html
 <div class="wrap">
@@ -217,13 +235,24 @@ Test at `http://localhost:4200/recipe`
 
 ## Recipe-detail component
 
+`recipe-detail` html:
+
 ```html
 <button (click)="back()">Back</button>
 ```
 
+In `recipe-detail` component class:
+
 ```js
-back() {
-  window.history.back()
+export class RecipeDetailComponent implements OnInit {
+
+  back() {
+    window.history.back()
+  }
+
+  constructor() { }
+  ngOnInit() {
+  }
 }
 ```
 
@@ -231,7 +260,7 @@ Go to `http://localhost:4200/recipe` and test.
 
 We are going to be sharing data and functionality across components.
 
-Create a model, `Recipe.ts`, in a new models folder in `src`.
+Create a model, `Recipe.ts`, in a new `models` folder in `app`.
 
 ```js
  export interface Recipe {
@@ -243,30 +272,30 @@ Create a model, `Recipe.ts`, in a new models folder in `src`.
  }
 ```
 
-Use it in our recipes and recipe-detail components.
+Use it in our `recipes` and `recipe-detail` components.
 
 Import it:
 
 `import { Recipe } from '../../models/Recipe';`
 
-And add it to the class:
+And add it to the classes:
 
 `recipe: Recipe;`
 
 Move the data into the service
 
-1. register / add the service to app.module
+1. register / add the data service to app.module
 1. import the service into the recipes templates
 
-In app.module:
+In `app.module`:
 
 ```js
-import { DataService } from './service/data.service'
+import { DataService } from './service/data.service';
 ...
   providers: [DataService],
 ```
 
-Add param
+Add a param to the routes:
 
 ```js
 const appRoutes: Routes = [
@@ -330,7 +359,7 @@ constructor() {
 }
 ```
 
-Remove the data from the recipes.component and call a function from the service to retrieve them:
+Remove the data from the `recipes.component` and call a function from the service to retrieve them:
 
 ```js
   constructor(public dataService: DataService) {
@@ -375,7 +404,7 @@ getRecipes() {
 }
 ```
 
-Get the display into in recipe-detail - we're going to have to access the url params.
+Get the display into in `recipe-detail` - we're going to have to access the url params.
 
 ```js
 import { Router, ActivatedRoute, Params } from '@angular/router';
@@ -396,6 +425,8 @@ getRecipe(id) {
   return this.recipe;
 }
 ```
+
+`id: string;`
 
 recipe-detail html:
 
@@ -434,6 +465,7 @@ import { HttpModule } from '@angular/http';
 Now that its added to our app we can use it in the service:
 
 ```js
+// BAD
 import { Http, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise'
 ...
@@ -448,6 +480,10 @@ getRecipes() {
 }
 ```
 
+
+GOOD
+`import { Http } from '@angular/http';`
+
 ## API
 
 note the app.use headers in app.js. Uncomment these lines
@@ -460,6 +496,14 @@ note the app.use headers in app.js. Uncomment these lines
     this.recipes = response.json()
   }
 ```
+
+```js
+  constructor(public dataService: DataService) {
+    this.pageTitle = 'Recipes'
+    // this.recipes = this.dataService.getRecipes()
+  }
+```
+
 
 In recipe-detail component:
 
@@ -514,9 +558,86 @@ Safe operator?
 
 `<h1>{{ recipe?.title }}</h1>`
 
+## Notes
+
+### Adding the api url to environment vars
+
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:3006/'
+};
 
 
+import { environment } from 'environments/environment';
 
+const API_URL = environment.apiUrl;
+
+You can find the mapping between dev and prod and their corresponding environment files in .angular-cli.json:
+
+"environments": {
+  "dev": "environments/environment.ts",
+  "prod": "environments/environment.prod.ts"
+}
+
+You can also create additional environments such as staging by adding a key:
+
+"environments": {
+  "dev": "environments/environment.ts",
+  "staging": "environments/environment.staging.ts",
+  "prod": "environments/environment.prod.ts"
+}
+
+and creating the corresponding environment file.
+
+### Using Observables
+
+service
+
+```
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+
+  public getRecipes(): Observable<Recipe[]> {
+    // return this.http.get('http://localhost:3006/api/recipe').toPromise()
+    return this.http
+      .get('http://localhost:3006/api/recipe')
+      .map(response => {
+        const recipes = response.json();
+        return recipes.map((recipe) => new Recipe(recipe));
+      });
+  }
+```
+
+Recipe.ts:
+
+```
+export class Recipe {
+  name: string;
+    title: string;
+    date: string;
+    description: string;
+    image: string;
+
+  constructor(values: Object = {}) {
+    Object.assign(this, values);
+  }
+}
+```
+
+recipes component
+
+```
+  public ngOnInit() {
+    // const response = await this.dataService.getRecipes()
+    // this.recipes = response.json()
+    this.dataService
+      .getRecipes()
+      .subscribe(
+        (recipes) => {
+          this.recipes = recipes;
+        });
+  }
+```
 
 
 

@@ -1,0 +1,10 @@
+@media (max-width: 620px){
+  .recipe-entry li {
+    display: flex;
+    flex-direction: column;
+  }
+  .recipe-entry img {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+}
