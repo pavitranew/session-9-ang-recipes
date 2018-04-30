@@ -336,7 +336,7 @@ Note that we can control the location of the global scss files as well (there ar
 
 Move the sass directory into `src`.
 
-Our recipes component css can then be renamed to `recipes.component.scss`. 
+Our recipes component css can then be renamed to `recipes.component.scss`.
 
 We then have to manually rename our recipes styleUrl:
 
@@ -385,7 +385,7 @@ and import it into the recipes scss file:
 
 `@import '../../../sass/variables';`
 
-Our globals are now in the sass directory. 
+Our globals are now in the sass directory.
 
 We can tidy up our globals, retaining only the appropriate selectors:
 
@@ -856,7 +856,22 @@ Safe / Elvis operator?
 
 `<h1>{{ recipe?.title }}</h1>`
 
+Or use an if:
+
+`<div *ngIf="recipe" class="recipe">`
+
 ## Notes
+
+Access Control
+
+```js
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
+  next()
+})
+```
 
 ### Adding the api url to environment vars
 
