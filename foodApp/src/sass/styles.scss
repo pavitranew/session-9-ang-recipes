@@ -1,0 +1,40 @@
+@import 'variables';
+@import url("https://fonts.googleapis.com/css?family=Lobster");
+
+:root {
+  --blue: #007eb6;
+  --green: #3f504a;
+  --break: 620px;
+}
+html {
+  box-sizing: border-box;
+  font-family: 'helvetica neue';
+  font-size: 20px;
+  font-weight: 200;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+body {
+  min-height: 100vh;
+  margin: 0;
+  background-color: var(--blue);
+}
+
+.wrap {
+  background: #eee;
+  max-width: 90%;
+  padding: 0.5rem;
+  margin: 1rem auto;
+}
+h1,
+h2 {
+  font-family: lobster;
+  margin-top: 0;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
