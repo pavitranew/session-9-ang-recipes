@@ -30,7 +30,7 @@ Create a second tab in the terminal and run:
 
 `ng serve`
 
-app.component.html:
+In `app.component.html`:
 
 ```html
 <div class="wrap">
@@ -40,7 +40,7 @@ app.component.html:
 
 ## Recipes Component
 
-Add a typed variable to the class :
+Add a typed variable to the `recipes.component` class :
 
 `pageTitle: string;`
 
@@ -182,24 +182,24 @@ Adjust the global css:
 }
 ```
 
-Add a `.recipe-entry` class to the recipes html template and css for the recipes component css:
+Add a `.recipe-entry` class to the `recipes template` and css for the recipes component css:
 
 ```css
 @media (max-width: 620px){
-  .recipe-entry li {
+  .wrap li {
     display: flex;
     flex-direction: column;
   }
-  .recipe-entry img {
+  .wrap li img {
     width: 100%;
     margin-bottom: 1rem;
   }
 }
 ```
 
-Note that we are already off to a bad start with our css. Let's use SASS for our global styles.
+Note that we are already off to a bad start with our css. Let's use mobile first design and SASS for our global styles.
 
-Create a prefs at the root of the project:
+Create some workspace prefs at the root of the project:
 
 ```js
 {
@@ -226,11 +226,7 @@ Test with:
 Adjust the global sass file:
 
 ```css
-$breakone: 620px;
-
 @import url("https://fonts.googleapis.com/css?family=Lobster");
-
-@import 'components/recipes';
 
 :root {
   --blue: #007eb6;
@@ -305,6 +301,8 @@ Note that you cannot use a native css variable for a break point, e.g.:
 
 ## Angular CLI Sass
 
+Important! Turn off the sass watching in VSCode.
+
 We can retrofit our existing project to use sass with:
 
 ```sh
@@ -334,11 +332,19 @@ Note that we can control the location of the global scss files as well (there ar
 },
 ```
 
-Our recipes component css can then be renamed to `recipes.component.scss`:
+Move the sass directory into `src`.
+
+Our recipes component css can then be renamed to `recipes.component.scss`. 
+
+We then have to manually rename our recipes styleUrl:
+
+```js
+styleUrls: ['./recipes.component.scss']
+```
+
+Now we can use sass in our component style sheets:
 
 ```css
-@import '../../../sass/variables';
-
 .recipes {
   li {
     display: flex;
@@ -369,11 +375,13 @@ Our recipes component css can then be renamed to `recipes.component.scss`:
 }
 ```
 
-We then have to manually rename our recipes styleUrl:
+Almost. Create a variables sass partial in the global sass directory with:
 
-```js
-styleUrls: ['./recipes.component.scss']
-```
+`$breakone: 620px;`
+
+and import it into the recipes scss file:
+
+`@import '../../../sass/variables';`
 
 Our globals are now in the sass directory:
 
