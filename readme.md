@@ -197,6 +197,22 @@ Add a `.recipe-entry` class to the recipes html template and css for the recipes
 }
 ```
 
+Note that we are already off to a bad start with our css. Let's use SASS for our global styles.
+
+Create a prefs at the root of the project:
+
+```js
+{
+  "liveSassCompile.settings.formats": [
+    {
+      "savePath": "/rest-api/static/css/",
+      "format": "expanded"
+    }
+  ],
+  "liveSassCompile.settings.excludeList": ["**/node_modules/**", ".vscode/**", "**/other/**"]
+}
+```
+
 ## Routing
 
 Add the router module - `app.module`:
