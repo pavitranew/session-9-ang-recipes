@@ -24,11 +24,11 @@ and a service with a flag to update the app module:
 
 `ng generate service service/data --module app.module.ts`
 
+Examine `app.module.ts` - note the addition of a service
+
 Create a second tab in the terminal and run:
 
 `ng serve`
-
-Examine `app.module.ts` - note lack of a service
 
 app.component.html:
 
@@ -40,15 +40,15 @@ app.component.html:
 
 ## Recipes Component
 
-Add:
+Add a typed variable to the class :
 
-`pageTitle: string;` 
+`pageTitle: string;`
 
-to the class and 
+and
 
-`this.pageTitle = 'Recipes'` 
+`this.pageTitle = 'Recipes'`
 
-to the constructor:
+to the constructor, e.g.:
 
 ```js
 import { Component, OnInit } from '@angular/core';
@@ -60,7 +60,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RecipesComponent implements OnInit {
   pageTitle: string;
-  constructor() { 
+  constructor() {
     this.pageTitle = 'Recipes'
   }
   ngOnInit() {
@@ -76,9 +76,9 @@ In the recipes template:
 </div>
 ```
 
-Add css from the assets folder
+Add css from the assets folder. Note the error and correct it.
 
-Add data to recipes constructor:
+Add data to `recipes` constructor:
 
 ```js
 this.recipes = [
@@ -115,11 +115,11 @@ this.recipes = [
 ]
 ```
 
-Set the types in the class:
+Note the error. Set the types in the class:
 
 `recipes: object[];`
 
-(BAD) 
+Add a definition for a single recipe in the class:
 
 ```js
 recipe: {
