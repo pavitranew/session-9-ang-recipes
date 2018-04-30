@@ -151,6 +151,8 @@ Build out the html
 </div>
 ```
 
+Note the link to recipe in the anchor tag.
+
 Add image assets to the project (you'll need to restart Webpack in order for it to process and allow the images to appear).
 
 Adjust the global css:
@@ -319,7 +321,7 @@ which adds this to the `.angular-cli.json` file:
 }
 ```
 
-Note that we can control the location of the global scss files as well (there are a variety of preprocessor options). We will place our sass folder in `src` and edit the `.angular-cli.json` file:
+Note that we can control the location of the global scss files as well (there are a variety of [preprocessor options](https://scotch.io/tutorials/using-sass-with-the-angular-cli)). We will place our sass folder in `src` and edit the `.angular-cli.json` file:
 
 ```js
 "styles": [
@@ -383,7 +385,9 @@ and import it into the recipes scss file:
 
 `@import '../../../sass/variables';`
 
-Our globals are now in the sass directory:
+Our globals are now in the sass directory. 
+
+We can tidy up our globals, retaining only the appropriate selectors:
 
 ```css
 @import 'variables';
@@ -429,7 +433,7 @@ ul {
 
 ## Routing
 
-Add the router module - `app.module`:
+Add the [router module](https://angular.io/api/router/RouterModule) to `app.module`:
 
 ```js
 import { RouterModule, Routes } from '@angular/router';
@@ -464,11 +468,31 @@ Test at `http://localhost:4200/recipe`
 
 ## Recipe-detail component
 
-`recipe-detail` html:
+Let's introduce a simple function into our recipe detail.
+
+Add to `recipe-detail` html:
 
 ```html
 <button (click)="back()">Back</button>
 ```
+
+Rename the css file to scss and style the button.
+
+```css
+.recipe {
+  button {
+    background: var(--blue);
+    color: #fff;
+    padding: 0.25rem 0.5rem;
+    border: 2px solid #fff;
+    border-radius: 3px;
+  }
+}
+```
+
+Note: this is pretty generic and should probably be transfered to the global styles as a buttons partial.
+
+Change the detail html to include a div with the recipe class.
 
 In `recipe-detail` component class:
 
@@ -503,15 +527,15 @@ Create a model, `Recipe.ts`, in a new `models` folder in `app`.
  }
 ```
 
-Use it in our `recipes` and `recipe-detail` components.
-
-Import it:
+Use it in our `recipes` and `recipe-detail` components by importing it:
 
 `import { Recipe } from '../../models/Recipe';`
 
 And add it to the classes:
 
 `recipe: Recipe;`
+
+## Data Service
 
 Move the data into the service
 
@@ -526,7 +550,7 @@ import { DataService } from './service/data.service';
   providers: [DataService],
 ```
 
-Add a param to the routes:
+Add a param to the `recipeDetailComponent` route:
 
 ```js
 const appRoutes: Routes = [
@@ -541,17 +565,11 @@ Ammend the recipes template:
 <a href="recipe/{{recipe.name}}">{{recipe.title}}</a>
 ```
 
-Add / make it available to the recipes and recipe-detail components:
+Add / make the data service available in the recipes and recipe-detail components:
 
 `import { DataService } from '../../service/data.service';`
 
 ## Service
-
-Add the model to the service:
-
-`import { Recipe } from '../models/Recipe';`
-
-`recipes: Recipe[]`
 
 ```js
 constructor() {
@@ -590,6 +608,14 @@ constructor() {
 }
 ```
 
+Add the model to the service:
+
+`import { Recipe } from '../models/Recipe';`
+
+And in its class:
+
+`recipes: Recipe[]`
+
 Remove the data from the `recipes.component` and call a function from the service to retrieve them:
 
 ```js
@@ -625,8 +651,6 @@ class Point {
 
 By simply prefixing the constructor arg with the word private (or public or readonly) it automatically creates the property and initializes it from the constructor args. -->
 
-## Service cont
-
 Add the function to the service:
 
 ```js
@@ -635,7 +659,9 @@ getRecipes() {
 }
 ```
 
-Get the display into in `recipe-detail` - we're going to have to access the url params.
+### Back to Recipe Detail
+
+To get the display into in `recipe-detail` - we're going to have to access the url params.
 
 ```js
 import { Router, ActivatedRoute, Params } from '@angular/router';
@@ -657,15 +683,45 @@ getRecipe(id) {
 }
 ```
 
+Add to the `recipe-detail` class:
+
 `id: string;`
 
-recipe-detail html:
+And in `recipe-detail` html:
 
 ```html
 <h1>{{ recipe.title }}</h1>
-<img style="width: 30%" src="assets/home/{{recipe.image}}" />
+<img src="assets/home/{{recipe.image}}" />
 <p>{{ recipe.description }}</p>
 <button (click)="back()">Back</button>
+```
+
+Note that the formatting for the image is only available to the `recipes` view.
+
+Add it from the recipes sass and refactor the appropriate material into the global sass.
+
+Create `_mixins.scss' in the global sass directory with:
+
+```css
+@mixin photo-image {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    margin-right: 1rem;
+    background-color: #fff;
+    box-shadow: 2px 2px 4px #ccc;
+}
+```
+
+Use it in both scss files with:
+
+```css
+@import '../../../sass/mixins';
+
+...
+
+img {
+  @include photo-image;
+}
 ```
 
 ## HTTP Service
@@ -685,9 +741,11 @@ add http service to `app.module`:
 
 ```js
 import { HttpModule } from '@angular/http';
+```
 
-...
+And add it to the dependencies:
 
+```js
 imports: [
   BrowserModule,
   RouterModule.forRoot(appRoutes),
@@ -698,7 +756,6 @@ imports: [
 Now that its added to our app we can use it in the `service`:
 
 ```js
-// BAD
 import { Http, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise'
 ...
@@ -761,7 +818,7 @@ in `recipe-detail.component`:
   }
 ```
 
-### Data Service
+### Again Data Service
 
 In `service`:
 
