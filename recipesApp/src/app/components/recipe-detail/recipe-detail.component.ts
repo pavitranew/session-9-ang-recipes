@@ -12,13 +12,19 @@ export class RecipeDetailComponent implements OnInit {
 
   recipe: Recipe;
   id: string;
+  formEnabled: boolean;
   
   back() {
     window.history.back()
   }
 
+  editRecipe(){
+    console.log(this.recipe.title)
+  }
+
   constructor(public dataService: DataService, public route: ActivatedRoute) {
-    this.id = this.route.snapshot.params['id']
+    this.id = this.route.snapshot.params['id'];
+    this.formEnabled = false;
   }
 
   public ngOnInit() {

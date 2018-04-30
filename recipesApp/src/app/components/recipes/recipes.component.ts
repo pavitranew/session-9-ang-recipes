@@ -18,6 +18,11 @@ export class RecipesComponent implements OnInit {
     this.pageTitle = 'Recipes'
     // this.recipes = this.dataService.getRecipes()
   }
+
+  public deleteRecipe() {
+    console.log(this)
+  }
+
   public ngOnInit() {
     // const response = await this.dataService.getRecipes()
     // this.recipes = response.json()

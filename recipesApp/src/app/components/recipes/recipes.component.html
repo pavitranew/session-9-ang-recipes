@@ -8,6 +8,7 @@
         <h2>
           <!-- <a href="recipe/{{recipe._id}}">{{recipe.title}}</a> -->
           <a [routerLink]="['/recipe', recipe._id]">{{recipe.title}}</a>
+          <span (click)="deleteRecipe(index, recipe._id)">✖︎</span>
         </h2>
         <p>{{recipe.description}}</p>
       </div>

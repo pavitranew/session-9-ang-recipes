@@ -554,7 +554,7 @@ Ammend the link in recipes template:
 
 ```
 
-Safe operator?
+Safe / Elvis operator?
 
 `<h1>{{ recipe?.title }}</h1>`
 
@@ -562,30 +562,41 @@ Safe operator?
 
 ### Adding the api url to environment vars
 
+In the `environments` directory:
+
+```js
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:3006/'
 };
+```
 
+In the service:
 
+```js
 import { environment } from 'environments/environment';
 
 const API_URL = environment.apiUrl;
+```
 
 You can find the mapping between dev and prod and their corresponding environment files in .angular-cli.json:
 
+```js
 "environments": {
   "dev": "environments/environment.ts",
   "prod": "environments/environment.prod.ts"
 }
+```
 
 You can also create additional environments such as staging by adding a key:
 
+```js
 "environments": {
   "dev": "environments/environment.ts",
   "staging": "environments/environment.staging.ts",
   "prod": "environments/environment.prod.ts"
 }
+```
 
 and creating the corresponding environment file.
 
