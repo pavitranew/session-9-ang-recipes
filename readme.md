@@ -20,9 +20,8 @@ Generate components
 
 `ng generate component components/recipe-detail`
 
-and a service
+and a service with a flag to update the app module:
 
-`ng generate service service/data`
 `ng generate service service/data --module app.module.ts`
 
 Create a second tab in the terminal and run:
@@ -602,9 +601,9 @@ and creating the corresponding environment file.
 
 ### Using Observables
 
-service
+In `service`
 
-```
+```js
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
@@ -619,9 +618,11 @@ import 'rxjs/add/operator/map';
   }
 ```
 
-Recipe.ts:
+Configure our Recipe as an exported object.
 
-```
+In `Recipe.ts`:
+
+```js
 export class Recipe {
   name: string;
     title: string;
@@ -635,9 +636,9 @@ export class Recipe {
 }
 ```
 
-recipes component
+In `recipes component`:
 
-In obersvables `subscribe` replaces promises' `then`.
+In observables `subscribe` replaces promises' `then`.
 
 An observable doesn't start emitting values until `subscribe` is called.
 
@@ -654,11 +655,13 @@ An observable doesn't start emitting values until `subscribe` is called.
   }
 ```
 
-## HttpClient
+Note `public ngOnInit`, not async.
 
-Module
+## HttpClient (vs Http)
 
-```
+In `module`
+
+```js
 import { HttpClientModule } from '@angular/common/http';
 
   imports: [
@@ -669,9 +672,9 @@ import { HttpClientModule } from '@angular/common/http';
   ],
 ```
 
-Service
+In `Service`
 
-```
+```js
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 export class DataService {
@@ -687,12 +690,11 @@ export class DataService {
     return this.http
       .get<Recipe>('http://localhost:3006/api/recipe/' + id)
   }
-
 ```
 
-recipes component
+In `recipes component`
 
-```
+```html
 <h2>
   <!-- <a href="recipe/{{recipe._id}}">{{recipe.title}}</a> -->
   <a [routerLink]="['/recipe', recipe._id]">{{recipe.title}}</a>
@@ -700,9 +702,9 @@ recipes component
 ```
 
 
-recipes detail compoent
+Extend the use of Observables to the `recipes detail` component:
 
-```
+```js
   public ngOnInit() {
     // const response = await this.dataService.getRecipe(this.id)
     // this.recipe = response.json()
@@ -715,9 +717,9 @@ recipes detail compoent
   }
   ```
 
-Remove the safe operators for recipe detail template
+Remove the safe operators for `recipe detail` template
 
-```
+```html
 <h1>{{ recipe.title }}</h1>
 <img style="width: 30%" src="assets/home/{{recipe.image}}" />
 <p>{{ recipe.description }}</p>
