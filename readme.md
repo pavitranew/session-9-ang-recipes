@@ -205,11 +205,217 @@ Create a prefs at the root of the project:
 {
   "liveSassCompile.settings.formats": [
     {
-      "savePath": "/rest-api/static/css/",
+      "savePath": "/foodApp/src/",
       "format": "expanded"
     }
   ],
   "liveSassCompile.settings.excludeList": ["**/node_modules/**", ".vscode/**", "**/other/**"]
+}
+```
+
+Create a `sass` directory at the root of the project and save the existing css into it.
+
+Test with:
+
+```css
+* {
+  color: var(--blue);
+}
+```
+
+Adjust the global sass file:
+
+```css
+$breakone: 620px;
+
+@import url("https://fonts.googleapis.com/css?family=Lobster");
+
+@import 'components/recipes';
+
+:root {
+  --blue: #007eb6;
+  --green: #3f504a;
+}
+html {
+  box-sizing: border-box;
+  font-family: 'helvetica neue';
+  font-size: 20px;
+  font-weight: 200;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+body {
+  min-height: 100vh;
+  margin: 0;
+  background-color: var(--blue);
+}
+
+.wrap {
+  background: #eee;
+  max-width: 90%;
+  padding: 0.5rem;
+  margin: 1rem auto;
+}
+h1,
+h2 {
+  font-family: lobster;
+  margin-top: 0;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+.recipes li {
+  display: flex;
+  flex-direction: column;
+  @media (min-width: $breakone){
+    flex-direction: row;
+    padding: 1rem;
+  }
+}
+
+.recipes li img {
+  width: 100%;
+  height: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  margin-right: 1rem;
+  background-color: #fff;
+  box-shadow: 2px 2px 4px #ccc;
+  @media (min-width: $breakone){
+    width: 30%;
+  }
+}
+
+.recipes li a {
+  color: #7e360d;
+  text-decoration: none;
+}
+
+```
+
+Note that you cannot use a native css variable for a break point, e.g.:
+
+`--breakone: 620px;` is not inherited because a media query is not an element, it does not inherit. We use sass variables instead:
+
+`$breakone: 620px;` and `@media (min-width: $breakone)`
+
+## Angular CLI Sass
+
+We can retrofit our existing project to use sass with:
+
+```sh
+ng set defaults.styleExt scss
+```
+
+which adds this to the `.angular-cli.json` file:
+
+```js
+"defaults": {
+  "styleExt": "scss",
+  "component": {
+  }
+}
+```
+
+Note that we can control the location of the global scss files as well (there are a variety of preprocessor options). We will place our sass folder in `src` and edit the `.angular-cli.json` file:
+
+```js
+"styles": [
+  "sass/styles.scss"
+],
+"stylePreprocessorOptions": {
+  "includePaths": [
+
+  ]
+},
+```
+
+Our recipes component css can then be renamed to `recipes.component.scss`:
+
+```css
+@import '../../../sass/variables';
+
+.recipes {
+  li {
+    display: flex;
+    flex-direction: column;
+    @media (min-width: $breakone){
+      flex-direction: row;
+      padding: 1rem;
+    }
+  }
+
+  li img {
+    width: 100%;
+    height: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    margin-right: 1rem;
+    background-color: #fff;
+    box-shadow: 2px 2px 4px #ccc;
+    @media (min-width: $breakone){
+      width: 30%;
+    }
+  }
+
+  li a {
+    color: #7e360d;
+    text-decoration: none;
+  }
+}
+```
+
+We then have to manually rename our recipes styleUrl:
+
+```js
+styleUrls: ['./recipes.component.scss']
+```
+
+Our globals are now in the sass directory:
+
+```css
+@import 'variables';
+
+@import url("https://fonts.googleapis.com/css?family=Lobster");
+
+:root {
+  --blue: #007eb6;
+  --green: #3f504a;
+}
+html {
+  box-sizing: border-box;
+  font-family: 'helvetica neue';
+  font-size: 20px;
+  font-weight: 200;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+body {
+  min-height: 100vh;
+  margin: 0;
+  background-color: var(--blue);
+}
+
+.wrap {
+  background: #eee;
+  max-width: 90%;
+  padding: 0.5rem;
+  margin: 1rem auto;
+}
+h1,
+h2 {
+  font-family: lobster;
+  margin-top: 0;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
 }
 ```
 
@@ -273,17 +479,19 @@ export class RecipeDetailComponent implements OnInit {
 
 Go to `http://localhost:4200/recipe` and test.
 
+Exercise: add a 'Recipe' page title to the recipe page.
+
 We are going to be sharing data and functionality across components.
 
 Create a model, `Recipe.ts`, in a new `models` folder in `app`.
 
 ```js
  export interface Recipe {
- 	name: string;
- 	title: string;
- 	date: string;
- 	description: string;
- 	image: string;
+  name: string;
+  title: string;
+  date: string;
+  description: string;
+  image: string;
  }
 ```
 
@@ -302,7 +510,7 @@ Move the data into the service
 1. register / add the data service to app.module
 1. import the service into the recipes templates
 
-In `app.module`:
+In `app.module` we have:
 
 ```js
 import { DataService } from './service/data.service';
@@ -383,7 +591,7 @@ Remove the data from the `recipes.component` and call a function from the servic
   }
 ```
 
-## A note on `public`
+<!-- ## A note on `public`
 
 Suppose you have a simple class with two properties. And the constructor is used to initialize the properties like this:
 
@@ -407,7 +615,7 @@ class Point {
 }
 ```
 
-By simply prefixing the constructor arg with the word private (or public or readonly) it automatically creates the property and initializes it from the constructor args.
+By simply prefixing the constructor arg with the word private (or public or readonly) it automatically creates the property and initializes it from the constructor args. -->
 
 ## Service cont
 
@@ -459,25 +667,27 @@ We are going to get the data from an API using Http ($http in Angular 1).
 *Deploy the api using the backend assets in the zip file.*
 
 1. unzip
+1. in a new conole, cd into the backend directory
 1. npm install
+1. examine `app.js`
 1. `npm run start` the api in backend
 1. test at the get api endpoint `http://localhost:3006/`
 
-add http service to app.module
+add http service to `app.module`:
 
 ```js
 import { HttpModule } from '@angular/http';
 
 ...
 
-  imports: [
-    BrowserModule,
-    RouterModule.forRoot(appRoutes),
-    HttpModule
-  ],
+imports: [
+  BrowserModule,
+  RouterModule.forRoot(appRoutes),
+  HttpModule
+],
 ```
 
-Now that its added to our app we can use it in the service:
+Now that its added to our app we can use it in the `service`:
 
 ```js
 // BAD
@@ -495,15 +705,18 @@ getRecipes() {
 }
 ```
 
-
-GOOD
-`import { Http } from '@angular/http';`
+<!-- GOOD
+`import { Http } from '@angular/http';` -->
 
 ## API
 
-note the app.use headers in app.js. Uncomment these lines
+Note the `app.use` headers in `app.js`. Uncomment these lines.
 
- in recipes.component
+### Recipes List
+
+Use async on the ngOnInit life cycle hook to bring in the recipes:
+
+ in `recipes.component`:
 
 ```js
   async ngOnInit() {
@@ -512,6 +725,8 @@ note the app.use headers in app.js. Uncomment these lines
   }
 ```
 
+We can comment out the call to data service in the constructor:
+
 ```js
   constructor(public dataService: DataService) {
     this.pageTitle = 'Recipes'
@@ -519,8 +734,9 @@ note the app.use headers in app.js. Uncomment these lines
   }
 ```
 
+### Recipe Detail
 
-In recipe-detail component:
+In `recipe-detail` component:
 
 ```js
   async ngOnInit() {
@@ -529,7 +745,7 @@ In recipe-detail component:
   }
 ```
 
-in recipes-detail.component
+in `recipe-detail.component`:
 
 ```js
   constructor(public dataService: DataService, public route: ActivatedRoute) {
@@ -537,8 +753,9 @@ in recipes-detail.component
   }
 ```
 
-(BAD)
-in service
+### Data Service
+
+In `service`:
 
 `import { Router, ActivatedRoute, Params } from '@angular/router';`
 
@@ -548,7 +765,6 @@ recipe: Recipe;
 recipes: Recipe[]
 ```
 
-
 ```js
 getRecipe(id) {
   return this.http.get('http://localhost:3006/api/recipe/' + id).toPromise()
@@ -556,11 +772,13 @@ getRecipe(id) {
 ```
 
 ```js
-constructor(private http: Http) { 
+constructor(private http: Http) {
 }
 ```
 
-Ammend the link in recipes template:
+### Recipes List HTML
+
+Ammend the link in `recipes` template to use Mongo's `_id`:
 
 ```js
 <h2>
@@ -694,7 +912,7 @@ In `Service`
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 export class DataService {
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient) {
   }
 
     public getRecipes(): Observable<Recipe[]> {
@@ -716,7 +934,6 @@ In `recipes component`
   <a [routerLink]="['/recipe', recipe._id]">{{recipe.title}}</a>
 </h2>
 ```
-
 
 Extend the use of Observables to the `recipes detail` component:
 
@@ -741,26 +958,3 @@ Remove the safe operators for `recipe detail` template
 <p>{{ recipe.description }}</p>
 <button (click)="back()">Back</button>
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

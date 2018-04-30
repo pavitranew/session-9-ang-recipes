@@ -10,11 +10,11 @@
 
 	<script>
 		// Pseudocode: asynchronous
-		// const data = fetch('https://github.com/...')
-		// console.log(data)
+		const data = fetch('https://github.com/...')
+		console.log(data)
 		// JS is asynchronous so it doesn't stop to wait for the return and data would not be available
 
-		// alerts are blocking
+		// alerts - an example of blocking, everything else is aynchronous
 		// setInterval(() => console.log(Date.now()), 500)
 		// run alert('hi') is the terminal
 
